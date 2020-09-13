@@ -275,7 +275,6 @@
     if (!fs.existsSync(src)) {
       return callback(`Cannot find src file ${src}`);
     } else {
-      return excel.default(src, options.sheet, function(err, data) {
       return excel.default(src, options.sheet).then(function(data) {
         const result = convert(data, options);
         if (dst) {
