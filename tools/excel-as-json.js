@@ -276,12 +276,10 @@
       return callback(`Cannot find src file ${src}`);
     } else {
       return excel.default(src, options.sheet, function(err, data) {
-        var result;
-        if (err) {
-          return callback(`Error reading ${src}: ${err}`);
-        } else {
-          result = convert(data, options);
-          if (dst) {
+      return excel.default(src, options.sheet).then(function(data) {
+        const result = convert(data, options);
+        if (dst) {
+          if(options.writeToFile) {
             return write(result, dst, function(err) {
               if (err) {
                 return callback(err);
@@ -292,8 +290,11 @@
           } else {
             return callback(void 0, result);
           }
+
+        } else {
+          return callback(void 0, result);
         }
-      });
+      }).catch(err => callback(`Error reading ${src}: ${err}`));
     }
   };
 
